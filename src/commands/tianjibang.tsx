@@ -39,9 +39,24 @@ export default defineCommand({
           return `排名字段 ${field} 不是数字类型，无法排序`;
         }
 
-        xiuxianzhes.sort((a, b) => {
-          return (b.attributes as any)[field] - (a.attributes as any)[field];
-        });
+        // 修为字段单独处理
+        if (field === "xiuwei") {
+          const map = new Map<string, number>();
+          xiuxianzhes.sort((a, b) => {
+            if (!map.has(a.id)) {
+              map.set(a.id, a.attributes.xiuwei + a.attributes.breakXiuwei);
+            }
+            if (!map.has(b.id)) {
+              map.set(b.id, b.attributes.xiuwei + b.attributes.breakXiuwei);
+            }
+
+            return map.get(b.id)! - map.get(a.id)!;
+          });
+        } else {
+          xiuxianzhes.sort((a, b) => {
+            return (b.attributes as any)[field] - (a.attributes as any)[field];
+          });
+        }
 
         // 生成排名信息
         let message = `天机榜 - 按照【${attributeKeyToNameMap[field]}】排名\n`;
@@ -56,8 +71,12 @@ export default defineCommand({
           message += `你还不是修仙者，无法上榜\n`;
         }
         xiuxianzhes.forEach((x, index) => {
+          const jingjie =
+            field === "xiuwei"
+              ? `${x.attributes.jingjie}${x.attributes.jingjieStage}`
+              : "";
           message += `${index + 1}. ${x.name} - ${
-            attributeKeyToNameMap[field]
+            jingjie || attributeKeyToNameMap[field]
           }: ${formatNumber((x.attributes as any)[field])}\n`;
         });
         return (

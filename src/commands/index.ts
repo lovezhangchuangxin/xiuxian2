@@ -1,6 +1,7 @@
 import caiyao from "./caiyao";
 import caoyao from "./caoyao";
 import chakan from "./chakan";
+import chiyao from "./chiyao";
 import danyao from "./danyao";
 import liandan from "./liandan";
 import qiandao from "./qiandao";
@@ -18,4 +19,5 @@ export const commands = [
   qiandao,
   xiulian,
   tianjibang,
+  chiyao,
 ];

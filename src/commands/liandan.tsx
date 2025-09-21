@@ -14,7 +14,7 @@ export default defineCommand({
     ctx
       .command("炼丹 <丹药名称数量>", "炼制丹药，需要消耗草药和一定时间")
       .alias("炼制丹药", "liandan")
-      .action(({ session }, danyao) => {
+      .action(({ session }, danyao = "") => {
         const userId = session.userId;
         if (!gameData.xiuxianzhe[userId]) {
           return `你还不是修仙者，请先注册，指令：注册`;
@@ -47,7 +47,10 @@ export default defineCommand({
         // 算一下玩家最多能炼多少
         const max = calculateMaxLiandanAmount(xiuxianzhe, target);
         if (max < number) {
-          return `根据你的草药数量，你最多只能炼制 ${max} 颗${name}，请先采集足够的草药`;
+          return `根据你的草药数量，你最多只能炼制 ${max} 颗${name}，请先采集足够的草药。\n比如：采药 ${name}${
+            number - max
+          }
+          `;
         }
 
         // 开始炼丹，设置新的动作
@@ -60,11 +63,15 @@ export default defineCommand({
           newActionData
         );
 
-        const message = parseTemplate(switchActionTemplate, {
+        let message = parseTemplate(switchActionTemplate, {
           action: beforeData.actionData.type,
           diff: diffText,
           newAction: xiuxianzhe.actionData.type,
         });
+        const timeCost = Math.ceil(
+          (newActionData.duration * (24 * 60 * 60)) / gameData.config.timeScale
+        );
+        message += `\n炼制需要时间 ${timeCost}秒`;
 
         saveXiuXianZhe(ctx.config.dbPath, xiuxianzhe);
 

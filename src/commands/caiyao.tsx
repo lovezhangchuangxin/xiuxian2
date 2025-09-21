@@ -81,11 +81,15 @@ export default defineCommand({
           newActionData
         );
 
-        const message = parseTemplate(switchActionTemplate, {
+        let message = parseTemplate(switchActionTemplate, {
           action: beforeData.actionData.type,
           diff: diffText,
           newAction: xiuxianzhe.actionData.type,
         });
+        const timeCost = Math.ceil(
+          (newActionData.duration * (24 * 60 * 60)) / gameData.config.timeScale
+        );
+        message += `\n采药需要时间 ${timeCost}秒`;
 
         saveXiuXianZhe(ctx.config.dbPath, xiuxianzhe);
 

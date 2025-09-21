@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-xiuxian2",
-  "description": "",
+  "description": "修仙插件",
   "version": "0.0.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -9,14 +9,18 @@
     "dist"
   ],
   "license": "MIT",
-  "scripts": {},
   "keywords": [
     "chatbot",
     "koishi",
     "plugin"
   ],
-  "devDependencies": {},
   "peerDependencies": {
     "koishi": "^4.18.7"
+  },
+  "koishi": {
+    "description": {
+      "en": "Xiuxian plugin",
+      "zh": "修仙插件"
+    }
   }
 }
